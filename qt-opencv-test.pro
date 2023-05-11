@@ -35,7 +35,7 @@ INCLUDEPATH += /usr/include/opencv4
 
 LIBS += /usr/lib/x86_64-linux-gnu/libopencv_dnn.so
 #LIBS += /usr//usr/lib/x86_64-linux-gnu/libopencv_dnn_objdetect.so
-#LIBS += /usr/lib/x86_64-linux-gnu/libopencv_dnn_superres.so
+LIBS += /usr/lib/x86_64-linux-gnu/libopencv_dnn_superres.so
 LIBS += /usr/lib/x86_64-linux-gnu/libopencv_freetype.so
 LIBS += /usr/lib/x86_64-linux-gnu/libopencv_features2d.so
 LIBS += /usr/lib/x86_64-linux-gnu/libopencv_quality.so

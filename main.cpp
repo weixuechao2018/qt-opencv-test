@@ -124,20 +124,22 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    std::string folder_path = "/home/weixuechao/Downloads/1/";
+//    std::string folder_path = "/home/weixuechao/Downloads/1/";
 //    std::string folder_path = "/home/weixuechao/Downloads/11/";
 //    std::string folder_path = "/home/weixuechao/Downloads/15_1/";
+    std::string folder_path = "/home/weixuechao/Downloads/jidu-img/";
     ir_or_rgb::folder_image_check_variance(folder_path, 1);
 //    ir_or_rgb::folder_image_check(folder_path, 1);
-    return 0;
 
-    std::string path = "/home/weixuechao/Downloads/15_1/0001.jpg";
+//    std::string path = "/home/weixuechao/Downloads/15_1/0001.jpg";
 //    std::string path = "/home/weixuechao/Downloads/15_1/15121865458175.png";
 //    std::string path = "/home/weixuechao/Downloads/15_1/4556643640013.jpg";
+    std::string path = "/home/weixuechao/Downloads/jidu-img/939283.jpg";
     cv::Mat image = cv::imread(path);
 
     int type = image.type();
     int typec = CV_8UC3;
+    int channels = image.channels();
 
 //    Judge_color(image);
 

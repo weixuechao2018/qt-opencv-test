@@ -110,15 +110,39 @@ bool ir_or_rgb::folder_image_check_variance(std::string &folder_path, int type) 
 
     std::vector<std::string> file_vector;
     file_helper::getDirFile(folder_path, file_vector);
-
+    if(file_vector.empty()) {
+        return false;
+    }
     static const int pixel_h = 1920;
     static const int pixel_w = 1280;
     static const int len = pixel_h * pixel_w * 3;
-    for (auto &iter:file_vector) {
-        cv::Mat mat_dst;
-        if(type == 1) {
+
+    cv::Mat mat_dst;
+    for (auto &iter : file_vector) {
+        mat_dst.release();
+        auto func = [&mat_dst, &iter]() {
+            int type = mat_dst.type();
+            int typec = CV_8UC3;
+
+            std::cout << iter << "; channels:" << mat_dst.channels() << std::endl;
+
+            // 图片缩小
+            cv::Mat mat;
+            int h = mat_dst.cols / 20;
+            int w = mat_dst.rows / 20;
+            cv::resize(mat_dst, mat, cv::Size(h, w), 0, 0, cv::INTER_AREA);
+
+            ir_or_rgb::variance(mat, 15);
+            ir_or_rgb::variance1(mat, 15);
+        };
+
+        switch (type) {
+        case 1: {
             mat_dst = cv::imread(iter);
-        } else if(type == 2) {
+            func();
+            continue;
+        }
+        case 2: {
             static const int pixel_h = 1920;
             static const int pixel_w = 1280;
             static const int len = pixel_h * pixel_w * 3;
@@ -126,17 +150,12 @@ bool ir_or_rgb::folder_image_check_variance(std::string &folder_path, int type) 
             file_helper::readFile(iter, pSrc);
             cv::Mat yuv(1920, 1280, CV_8UC2, pSrc);
             cv::cvtColor(yuv, mat_dst, cv::COLOR_YUV2RGB_Y422);
-        } else {
-            continue;
+            func();
+            continue ;
         }
-        std::cout << iter << std::endl;
-
-        // 图片缩小
-        cv::Mat mat;
-        cv::resize(mat_dst, mat, cv::Size(mat_dst.cols / 20, mat_dst.rows / 20), 0, 0, cv::INTER_NEAREST);
-
-        ir_or_rgb::variance(mat, 15);
-        ir_or_rgb::variance1(mat, 15);
+        default:
+            break;
+        }
     }
     return true;
 
@@ -228,7 +247,7 @@ bool ir_or_rgb::folder_image_check(std::string &folder_path, int type) {
     static const int pixel_h = 1920;
     static const int pixel_w = 1280;
     static const int len = pixel_h * pixel_w * 3;
-    for (auto &iter:file_vector) {
+    for (auto &iter : file_vector) {
         cv::Mat mat_dst;
         if(type == 1) {
             mat_dst = cv::imread(iter);
@@ -243,7 +262,8 @@ bool ir_or_rgb::folder_image_check(std::string &folder_path, int type) {
         } else {
             continue;
         }
-        std::cout << iter << std::endl;
+
+        std::cout << iter << "; channels:" << mat_dst.channels() << std::endl;
         if(ir_or_rgb::check_is_ir_or_rgb(mat_dst, mat_dst.cols, mat_dst.rows)) {
 
         }
